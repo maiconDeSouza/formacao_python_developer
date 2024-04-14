@@ -1,0 +1,6 @@
+print(int(2.23))
+print(float(3))
+print(float("2.23"))
+print(bool(0))
+print(bool(23))
+print(str(45))
