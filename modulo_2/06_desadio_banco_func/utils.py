@@ -1,78 +1,12 @@
 import os
 import platform
 import time
-import random
 import json
-from datetime import datetime
 
+lista_de_contas = []
 
-def pegar_lista_de_contas():
-    path = './lista_de_contas.json'
-
-    if os.path.exists(path):
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    else:
-        with open(path, "w", encoding="utf-8") as f:
-            return json.dump([], f, ensure_ascii=False, indent=2)
-
-
-def buscar_por_conta(conta):
-    lista = pegar_lista_de_contas()
-    for item in lista:
-        if item["numero_conta"] == conta:
-            return True
-    return False
-
-
-def buscar_por_cpf(cpf):
-    lista = pegar_lista_de_contas()
-    for item in lista:
-        if item["cpf"] == cpf:
-            return True
-    return False
-
-
-def gerar_numero_da_conta():
-    numero_conta = ''
-    while True:
-        numero_conta = ''.join(str(random.randint(0, 9)) for _ in range(5))
-        exist_conta = buscar_por_conta(numero_conta)
-        if exist_conta:
-            continue
-        else:
-            break
-    return numero_conta
-
-
-def criar_nova_conta():
-    limpar_terminal_mensagem('', 0.5)
-    print('Digite o nome do novo Cliente:')
-    nome = input()
-    limpar_terminal_mensagem('', 0.5)
-    print('Digite o cpf do novo Cliente:')
-    cpf = input()
-
-    data_atual = formatar_data()
-    numero_conta = gerar_numero_da_conta()
-
-    exist_cpf = buscar_por_cpf(cpf)
-
-    if exist_cpf:
-        return (False, 'CPF já existente!')
-    else:
-        return (True, {
-            'name': nome,
-            'cpf': cpf,
-            'data': data_atual,
-            'numero_conta': numero_conta
-        })
-
-
-def formatar_data():
-    agora = datetime.now()
-    data_formatada = agora.strftime("%Y-%m-%d / %H:%M:%S")
-    return data_formatada
+login_gerente_var = 'Bill01'
+password_gerente = 'abc123'
 
 
 def limpar_terminal():
@@ -87,3 +21,29 @@ def limpar_terminal_mensagem(texto: str, tempo: int):
     print(texto)
     time.sleep(tempo)
     limpar_terminal()
+
+
+def criar_ou_pegar_lista():
+    path = './listas_de_contas.json'
+
+    if not os.path.exists(path):
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump([], f, ensure_ascii=False, indent=2)
+
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def login_gerente():
+    limpar_terminal_mensagem('Aguarde...', 1)
+    print('Digite seu login de gerente:')
+    login = input()
+
+    limpar_terminal_mensagem('', 1)
+    print('Digite sua ssenha de gerente:')
+    password = input()
+
+    if login == login_gerente_var and password == password_gerente:
+        return (True, 'Login realizado com sucesso!')
+    else:
+        return (False, 'Senha ou Login invalidos!')

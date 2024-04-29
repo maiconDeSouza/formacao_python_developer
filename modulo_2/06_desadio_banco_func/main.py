@@ -15,22 +15,20 @@ while True:
     op = input()
 
     if op == '1':
-        result = contas.main()
-        if result is not None:
-            concluido, message = result
-            if concluido:
-                utils.limpar_terminal_mensagem('Concluido!!', 3)
-                continue
-            else:
-                utils.limpar_terminal_mensagem(message, 3)
-                continue
+        result_login = contas.login()
+        valid_login, message_login = result_login
+        if valid_login:
+            utils.limpar_terminal_mensagem(message_login, 2)
+        else:
+            utils.limpar_terminal_mensagem(message_login, 2)
+            continue
     elif op == '2':
         transacoes.main()
     elif op == 'q':
-        utils.limpar_terminal_mensagem('Bye', 2)
+        message = 'bye'
+        utils.limpar_terminal_mensagem(message, 2)
         break
     else:
-        msg = 'Por favor digite uma opão correta!'
-        tempo = 2
-        utils.limpar_terminal_mensagem(msg, tempo)
+        message = 'Por favor digite uma das opções listadas no menu'
+        utils.limpar_terminal_mensagem(message, 2)
         continue
